@@ -1,20 +1,29 @@
 class GaterController < ApplicationController
 
-	require 'vk-ruby'
-	APP_ID = 2782197
-	APP_SECRET = 'u820kFrXOFGqlptrXxXX'
+	require 'digest/md5'
+	
+	VK_APP_ID = 2782197
+	VK_APP_SECRET = 'u820kFrXOFGqlptrXxXX'
 
   def index
 	
-	@VKParam = 'boring!'
+	if params[:api_id] && params[:viewer_id]
 	
-	vkApp = VK::Secure.new(:app_id => APP_ID, :app_secret => APP_SECRET)
-	#puts vkApp
-	if vkApp.authorize
+		vkAuthKey = Digest::MD5.hexdigest(params[:api_id] + '_' + params[:viewer_id] + '_' + VK_APP_SECRET)
+		
+		if params[:auth_key] == vkAuthKey
+
+			redirect_to :action => 'vkontakte'
+			
+		end
 	
 	end
-	#@VKParam= vkApp.isAppUser
-	@VKParam = vkApp
+	
+	redirect_to :action => 'vkontakte'
+  
+  end
+  
+  def vkontakte
   
   end
   
