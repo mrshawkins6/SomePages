@@ -19,13 +19,16 @@
             <span class="i-bar"></span>
             <span class="i-bar"></span>
           </a>
-          <a class="brand" href="#">Anketki</a>
+		  <%= link_to logo, root_path, :class => "brand" %>
           <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Профиль</a></li>
-              <li><a href="#about">Настройки</a></li>
-              <li><a href="#contact">Награды</a></li>
-            </ul>
+            <% if signed_in? %>
+				<ul class="nav">
+					<li><%= link_to "Профиль", current_user %></li>
+					<li><%= link_to "Настройки", edit_user_path(current_user) %></li>
+					<li><a href="#">Награды</a></li>
+					<li><%= link_to "Выйти", sign_out %></li>
+				</ul>
+			<% end %>
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -37,10 +40,7 @@
       <div class="hero-unit">
 	  
 		<div class="row-fluid show-grid">
-			<div class="span2"><img src="http://cs303806.vk.com/u8610830/a_0913e890.jpg" /></div>
-			<div class="span10">
-				<%= yield %>
-			</div>
+			<%= yield %>
 		</div>
       </div>
 

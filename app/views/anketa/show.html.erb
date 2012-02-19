@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Notebook:</b>
+  <%= @anketum.notebook_id %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @anketum.title %>
+</p>
+
+
+<%= link_to 'Edit', edit_anketum_path(@anketum) %> |
+<%= link_to 'Back', anketa_path %>

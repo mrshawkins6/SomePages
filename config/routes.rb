@@ -1,10 +1,19 @@
 Anketki::Application.routes.draw do
 
-  resources :users
+  resources :anketa
 
-  get "gater/index"
+  resources :notebooks
+  resources :users
   
-  get "gater/vkontakte"
+  match '/app', :to => 'application#index'
+  
+  get "gater/facebook"
+  
+  get "gater/fail"
+
+  match '/vkontakte',  :to => 'gater#vkontakte'
+  
+  #match '/signin',  :to => 'gater#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

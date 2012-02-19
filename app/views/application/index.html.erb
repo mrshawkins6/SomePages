@@ -1,1 +1,6 @@
-111
+<%= current_user.id %>
+<%= current_user.first_name %>
+<%= current_user.last_name %>
+<%= current_user.photo %>
+<%= current_user.notebooks.count %>
+<%= link_to current_user.notebooks.first.title, notebook_path(current_user.notebooks.first) %>
