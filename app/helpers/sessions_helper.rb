@@ -1,8 +1,8 @@
-module GaterHelper
-
-def sign_in(user)
-    cookies.permanent.signed[:remember_token] = [user.id, user.salt]
-    current_user = user
+module SessionsHelper
+  def sign_in(user)
+	cookies.permanent.signed[:remember_token] = [user.id, user.salt]
+	session[:user_id] = user.id
+	current_user = user
   end
 
   def signed_in?
@@ -11,6 +11,7 @@ def sign_in(user)
 
   def sign_out
     cookies.delete(:remember_token)
+	session[:user_id] = nil
     self.current_user = nil
   end
 
@@ -21,7 +22,7 @@ def sign_in(user)
   def require_signed_in
     unless signed_in?
       store_location
-      redirect_to signin_path, :notice => "Please sign in to access this page", :params => params
+      redirect_to signin_path, :notice => "Please sign in to access this page"
     end
   end
 
@@ -60,11 +61,10 @@ def sign_in(user)
   private
 
     def user_from_remember_token
-      User.authenticate_with_salt(*remember_token)
+	  session[:user_id]!=nil ? User.find(session[:user_id]) : User.authenticate_with_salt(*remember_token);
     end
 
     def remember_token
       cookies.signed[:remember_token] || [nil, nil]
     end
-
 end

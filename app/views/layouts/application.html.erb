@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Anketki</title>
+  <title><% title%></title>
+  <%= csrf_meta_tags %>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= stylesheet_link_tag    "bootstrap.min", :media => "all" %>
   <%= stylesheet_link_tag    "bootstrap.min.responsive", :media => "all" %>
   <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
 </head>
 <body>
 
@@ -26,7 +26,7 @@
 					<li><%= link_to "Профиль", current_user %></li>
 					<li><%= link_to "Настройки", edit_user_path(current_user) %></li>
 					<li><a href="#">Награды</a></li>
-					<li><%= link_to "Выйти", sign_out %></li>
+					<li><%= link_to "Выйти", signout_path, :method => :delete %></li>
 				</ul>
 			<% end %>
           </div><!--/.nav-collapse -->
@@ -40,7 +40,26 @@
       <div class="hero-unit">
 	  
 		<div class="row-fluid show-grid">
+		<%= controller_name %><br />
+		<%= action_name %><br />
+		<%= session[:user_id] %>
 			<%= yield %>
+			<% if !signed_in? %>
+				<form id="authform" action="<%= url_for(:action => 'new', :controller => 'sessions') %>" method="post" accept-charset="UTF-8">
+					<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+						<% params.each do |param, value| %>
+					<% end %>
+					<input type="submit" value="Войти" />
+				</form>
+				<script type="text/javascript">
+					$().ready(function(){
+						#$("#authform").submit();
+					});
+				</script>
+			<% end %>
+<% if Rails.env.production? %>
+        <%#= debug(cookies) %>
+<% end %>
 		</div>
       </div>
 

@@ -1,6 +1,11 @@
 class User < ActiveRecord::Base
 
 	require 'digest'
+		
+	# Атрибуты
+	attr_accessor :status
+	attr_accessible :first_name, :last_name, :email, :password, :provider, :provider_id, :photo
+	
 	before_save :make_salt
 
 	# Константы провайдеров
@@ -16,10 +21,7 @@ class User < ActiveRecord::Base
 	email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
 	# Связи
-	has_many :notebooks
-	
-	# Атрибуты
-	attr_accessor :status, :photo
+	has_many :notebooks, :dependent => :destroy
 	
 	validates :provider,  :presence => true
 	validates :provider_id, :presence => true
@@ -27,13 +29,6 @@ class User < ActiveRecord::Base
 	#validates :email, :presence => false,
 	#				:format   => { :with => email_regex },
 	#				:uniqueness => { :case_sensitive => false }
-
-	def initialize(attributes = {})
-	
-		@provider  = attributes[:provider]
-		@status = attributes[:status]
-	
-	end
 	
 	def self.authenticate_with_salt(id, cookie_salt)
 		user = find_by_id(id)
@@ -50,7 +45,9 @@ class User < ActiveRecord::Base
 		
 		if user == nil
 		
-			user = User.new({:provider => VKONTAKTE.to_i, :provider_id => provider_info["user"]["uid"].to_i, :first_name => provider_info["user"]["first_name"].to_s, :last_name => provider_info["user"]["last_name"].to_s})
+			# если пользователь впервые зашёл в приложение
+		
+			user = User.new({:provider => VKONTAKTE.to_i, :provider_id => provider_info["user"]["uid"].to_i, :first_name => provider_info["user"]["first_name"].to_s, :last_name => provider_info["user"]["last_name"].to_s, :photo => provider_info["user"]["photo_medium"].to_s})
 			
 			user.save
 			
@@ -61,6 +58,14 @@ class User < ActiveRecord::Base
 			first_notebook = Notebook.new({:user_id => user.id.to_i, :title => first_title.to_s, :description => first_descr.to_s})
 			
 			first_notebook.save
+			
+		else
+		
+			if user.first_name != provider_info["user"]["first_name"].to_s || user.last_name != provider_info["user"]["last_name"].to_s || user.photo != provider_info["user"]["photo_medium"].to_s
+			
+				user.update_attributes(:first_name => provider_info["user"]["first_name"].to_s, :last_name => provider_info["user"]["last_name"].to_s, :photo => provider_info["user"]["photo_medium"].to_s)
+			
+			end
 		
 		end
 		
@@ -74,11 +79,31 @@ class User < ActiveRecord::Base
 		
 		end
 		
-		user.photo = provider_info["user"]["photo_medium"]
-		
-		return user
+		user
 		
 	end
+	
+	def self.create_with_omniauth(auth)
+	  create! do |user|
+		#user.provider = auth["provider"]
+		user.provider = VKONTAKTE.to_i
+		user.provider_id = auth["uid"].to_i
+		user.first_name = auth["first_name"].to_s
+		user.last_name = auth["last_name"].to_s
+		user.photo = auth["photo_medium"].to_s
+	  end
+	  
+	  first_title = "It's your first notebook"
+
+		first_descr = "Keep it real!!!"
+		
+		first_notebook = Notebook.new({:user_id => user.id.to_i, :title => first_title.to_s, :description => first_descr.to_s})
+		
+		first_notebook.save
+	  
+	end
+
+
 	
 	private
 	

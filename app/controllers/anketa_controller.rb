@@ -1,4 +1,7 @@
 class AnketaController < ApplicationController
+	
+	#before_filter :require_signed_in
+
   # GET /anketa
   # GET /anketa.json
   def index
@@ -13,6 +16,7 @@ class AnketaController < ApplicationController
   # GET /anketa/1
   # GET /anketa/1.json
   def show
+  
     @anketum = Anketum.find(params[:id])
 
     respond_to do |format|
@@ -24,9 +28,10 @@ class AnketaController < ApplicationController
   # GET /anketa/new
   # GET /anketa/new.json
   def new
-    @anketum = Anketum.new
-
-    respond_to do |format|
+    @notebook = Notebook.find(params[:notebook].to_i)
+	@anketum = Anketum.new(:notebook_id => !@notebook != nil ? @notebook.id : nil )
+	
+	  respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @anketum }
     end

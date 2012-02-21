@@ -1,9 +1,9 @@
 Anketki::Application.routes.draw do
 
   resources :anketa
-
   resources :notebooks
   resources :users
+  resources :pages
   
   match '/app', :to => 'application#index'
   
@@ -11,9 +11,11 @@ Anketki::Application.routes.draw do
   
   get "gater/fail"
 
-  match '/vkontakte',  :to => 'gater#vkontakte'
+  match '/vkontakte',  :to => 'sessions#vkontakte'
   
-  #match '/signin',  :to => 'gater#index'
+  match '/signin',  :to => 'sessions#vkontakte'
+  
+  match '/signout',  :to => 'sessions#destroy'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -64,7 +66,7 @@ Anketki::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'gater#index'
+  root :to => 'sessions#vkontakte'
 
   # See how all your routes lay out with "rake routes"
 

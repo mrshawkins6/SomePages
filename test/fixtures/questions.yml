@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  anketum_id: 1
+  title: MyString
+  type: 1
+  body: MyString
+
+two:
+  anketum_id: 1
+  title: MyString
+  type: 1
+  body: MyString
