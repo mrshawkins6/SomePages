@@ -1,3 +1,5 @@
+<%#= debug(@anketum) %>
+<%#= debug(@anketum.questions) %>
 <%= form_for(@anketum) do |f| %>
   <% if @anketum.errors.any? %>
     <div id="error_explanation">
@@ -10,15 +12,22 @@
       </ul>
     </div>
   <% end %>
-
+  <%= f.hidden_field :notebook_id %>
   <div class="field">
-    <%= f.label :notebook_id %><br />
-    <%= f.number_field :notebook_id %>
-  </div>
-  <div class="field">
-    <%= f.label :title %><br />
     <%= f.text_field :title %>
   </div>
+
+  <b>Твои вопросы:</b><br />
+	  <%= f.fields_for :questions do |q| %>
+	    <div class="field">
+		 Вопрос: <%= q.text_field :title %><br />
+		 <label><%= q.radio_button :variant, '0' %> Сообщение</label>
+		 <label><%= q.radio_button :variant, '1' %> Выбор</label>
+		 <label><%= q.radio_button :variant, '2' %> Мультивыбор</label><br/>
+		 
+		 <%= q.text_field :body %>
+		</div>
+	  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

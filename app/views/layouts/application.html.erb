@@ -12,24 +12,21 @@
 
 <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 
-            <span class="i-bar"></span>
-            <span class="i-bar"></span>
-            <span class="i-bar"></span>
-          </a>
+		<div class="container">
+		
+		  <% if signed_in? %>
+			<ul id="userbar">
+				<li><%= link_to content_tag(:i, "", {:class => "icon-user icon-white"}), current_user, :id => "profile_link" %></li>
+				<li><%= link_to content_tag(:i, "", {:class => "icon-cog icon-white"}), edit_user_path(current_user), {:id => "edit_profile_link"} %></li>
+				<li><%= link_to content_tag(:i, "", {:class => "icon-star icon-white"}), edit_user_path(current_user), {:id => "rate_system_link"} %></li>
+				<li><%= link_to content_tag(:i, "", {:class => "icon-remove-circle icon-white"}), signout_path, :method => :delete, :id => "sign_out_link" %></li>
+			</ul>
+			
+		  <% end %>
+		  
 		  <%= link_to logo, root_path, :class => "brand" %>
-          <div class="nav-collapse">
-            <% if signed_in? %>
-				<ul class="nav">
-					<li><%= link_to "Профиль", current_user %></li>
-					<li><%= link_to "Настройки", edit_user_path(current_user) %></li>
-					<li><a href="#">Награды</a></li>
-					<li><%= link_to "Выйти", signout_path, :method => :delete %></li>
-				</ul>
-			<% end %>
-          </div><!--/.nav-collapse -->
+
         </div>
       </div>
     </div>
@@ -40,9 +37,7 @@
       <div class="hero-unit">
 	  
 		<div class="row-fluid show-grid">
-		<%= controller_name %><br />
-		<%= action_name %><br />
-		<%= session[:user_id] %>
+		<b>controller</b> <%= controller_name %> | <b>action</b> <%= action_name %> | <b>user_id</b> <%= session[:user_id] %><% if signed_in? %> | <b>provider</b> <%= current_user.provider %><% end %>
 			<%= yield %>
 			<% if !signed_in? %>
 				<form id="authform" action="<%= url_for(:action => 'new', :controller => 'sessions') %>" method="post" accept-charset="UTF-8">
@@ -64,31 +59,32 @@
       </div>
 
       <!-- Example row of columns -->
-      <div class="row">
-        <div class="span4">
-          <h2>Новые запросы</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+      <div id="userAppBar" class="row-fluid">
+        <div class="span4 span33">
+          <b>Лидеры рейтинга</b>
+           <p>Здесь список</p>
+          <p><a class="btn" href="#">Перейти к рейтингу &raquo;</a></p>
         </div>
 
-        <div class="span4">
-          <h2>Новые ответы</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+        <div class="span4 span33">
+          <b>Мои друзья</b> (пригласить)
+           <p>Здесь список друзей в приложении</p>
+          <p><a class="btn" href="#">Смотреть всех друзей &raquo;</a></p>
        </div>
-        <div class="span4">
-          <h2>Heading</h2>
-
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+        <div class="span4 span33">
+          <b>Магазин</b>
+          <p>Баннер</p>
         </div>
+		
+		<div class="clear"></div>
+		
       </div>
 
       <hr>
 
       <footer>
-        <p>&copy; Awesome Studio 2012</p>
-
+        <div class="span20">&copy; Awesome Studio 2012</div>
+		<div class="span20">Официальная группа ЧаВо О приложении</div>
       </footer>
 
     </div> <!-- /container -->

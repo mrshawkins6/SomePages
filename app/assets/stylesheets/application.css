@@ -11,10 +11,28 @@
  *= require_self
  *= require_tree .
 */
-body {
-	padding: 60px 0 40px;
-}
+body {padding: 60px 0 40px;}
+
+a:hover {background: none!important;}
 
 .hero-unit {padding: 20px!important;}
 
 .navbar-inner {background-image: -moz-linear-gradient(center top , #a81313, #6f2a2a)!important;}
+
+.navbar a.brand {padding: 5px 20px !important}
+.navbar a.brand:hover {background: none;}
+
+label {display: inline-block!important;}
+
+#userAppBar .span33 {
+	display: block;
+	float:left;
+	width: 31.9149%;
+}
+
+#userbar {display: block; float: right; list-style: none;margin: 8px 15px 0 0;}
+#userbar li {display: inline-block; float: left; line-height: 24px}
+#userbar li  a {padding: 5px 5px 0; width: 14px; height: 14px;}
+#userbar li  a:hover {background: none!important;}
+
+.hero-unit p {font-size:14px!important;}

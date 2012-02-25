@@ -1,29 +1,16 @@
-<h1>Listing notebooks</h1>
+<div id="notebooks">
+	<b>Тетради <%= (@user.nil?)?"пользователей":@user.fullname %></b>
 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Description</th>
-    <th>User</th>
-    <th>Anketka</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+	<% @notebooks.each do |notebook| %>
+	  <div>
+		<b><%= notebook.title %></b><br />
+		<i><%= notebook.description %></i><br />
+		<%= link_to 'Show', notebook %> | <%= link_to 'Edit', edit_notebook_path(notebook) %> | <%= link_to 'Destroy', notebook, confirm: 'Are you sure?', method: :delete %>
+	  </div>
+	<% end %>
+	</table>
 
-<% @notebooks.each do |notebook| %>
-  <tr>
-    <td><%= notebook.title %></td>
-    <td><%= notebook.description %></td>
-    <td><%= notebook.user_id %></td>
-    <td><%= notebook.anketka_id %></td>
-    <td><%= link_to 'Show', notebook %></td>
-    <td><%= link_to 'Edit', edit_notebook_path(notebook) %></td>
-    <td><%= link_to 'Destroy', notebook, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
+	<br />
 
-<br />
-
-<%= link_to 'New Notebook', new_notebook_path %>
+	<%= link_to 'New Notebook', new_notebook_path %>
+</div>

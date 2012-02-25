@@ -24,8 +24,10 @@
     <%= f.number_field :user_id %>
   </div>
   <div class="field">
-    <%= f.label :anketka_id %><br />
-    <%= f.number_field :anketka_id %>
+	  <%= f.fields_for :anketum do |a| %>
+		 <%= a.label :title %><%= a.text_field :title %><br />
+
+	  <% end %>
   </div>
   <div class="actions">
     <%= f.submit %>

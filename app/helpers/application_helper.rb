@@ -10,9 +10,7 @@ module ApplicationHelper
   end
 
   def logo
-    image_tag "logo.png", :alt => "Anketki", :class => "round"
+    image_tag "header_logo.png", :alt => "Anketki", :class => "round"
   end
-  
-  
 
 end

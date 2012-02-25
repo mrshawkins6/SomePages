@@ -8,16 +8,18 @@ class SessionsController < ApplicationController
 	VK_APP_SECRET = 'u820kFrXOFGqlptrXxXX'
 
 	def vkontakte
-
+	
 		if !signed_in?
-
+			
 			session = ::VkApi::Session.new VK_APP_ID, VK_APP_SECRET
-		
+
 			begin
 
-				user = User.authByKontakt(params, session)
+				user = User.authByKontakt(params, session)		
+
+			rescue StandardError => detail
 			
-			rescue StandardError
+				@error = detail
 
 				redirect_to '/pages'
 			
@@ -34,7 +36,7 @@ class SessionsController < ApplicationController
 			redirect_to current_user
 		
 		end
-
+		
 	end
 
 	def destroy

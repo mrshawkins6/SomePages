@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120219205153) do
+ActiveRecord::Schema.define(:version => 20120223225941) do
 
   create_table "anketa", :force => true do |t|
     t.integer  "notebook_id"
@@ -24,9 +24,24 @@ ActiveRecord::Schema.define(:version => 20120219205153) do
     t.string   "title"
     t.string   "description"
     t.integer  "user_id"
-    t.integer  "anketka_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "pages", :force => true do |t|
+    t.string   "title"
+    t.string   "body"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "questions", :force => true do |t|
+    t.integer  "anketum_id"
+    t.string   "title"
+    t.integer  "variant"
+    t.string   "body"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|

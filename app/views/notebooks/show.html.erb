@@ -11,15 +11,10 @@
 </p>
 
 <p>
-  <b>User:</b>
-  <%= @notebook.user_id %>
+	<% @notebook.anketum.each do |a| %>
+		<%= link_to a.title, anketum_path(a) %><br/>
+	<% end %>
 </p>
-
-<p>
-  <b>Anketka:</b>
-  <%= @notebook.anketka_id %>
-</p>
-
 
 <%= link_to 'Edit', edit_notebook_path(@notebook) %> |
 <%= link_to 'Back', notebooks_path %>

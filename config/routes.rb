@@ -1,8 +1,9 @@
 Anketki::Application.routes.draw do
 
+  resources :users
   resources :anketa
   resources :notebooks
-  resources :users
+  resources :questions
   resources :pages
   
   match '/app', :to => 'application#index'

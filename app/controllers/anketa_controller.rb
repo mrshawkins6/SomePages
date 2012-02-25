@@ -1,6 +1,6 @@
 class AnketaController < ApplicationController
 	
-	#before_filter :require_signed_in
+  before_filter :require_signed_in
 
   # GET /anketa
   # GET /anketa.json
@@ -18,8 +18,8 @@ class AnketaController < ApplicationController
   def show
   
     @anketum = Anketum.find(params[:id])
-
-    respond_to do |format|
+	
+	respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @anketum }
     end
@@ -28,8 +28,9 @@ class AnketaController < ApplicationController
   # GET /anketa/new
   # GET /anketa/new.json
   def new
-    @notebook = Notebook.find(params[:notebook].to_i)
+    @notebook = current_user.notebook
 	@anketum = Anketum.new(:notebook_id => !@notebook != nil ? @notebook.id : nil )
+	5.times{ @anketum.questions.build }
 	
 	  respond_to do |format|
       format.html # new.html.erb
@@ -40,6 +41,15 @@ class AnketaController < ApplicationController
   # GET /anketa/1/edit
   def edit
     @anketum = Anketum.find(params[:id])
+	
+	querstions_size = @anketum.questions.count
+
+	if querstions_size < 5 
+	
+		(5 - querstions_size).times{ @anketum.questions.build } 
+	
+	end
+	
   end
 
   # POST /anketa
@@ -62,6 +72,14 @@ class AnketaController < ApplicationController
   # PUT /anketa/1.json
   def update
     @anketum = Anketum.find(params[:id])
+	
+	querstions_size = @anketum.questions.count
+
+	if querstions_size < 5 
+	
+		(5 - querstions_size).times{ @anketum.questions.build } 
+	
+	end
 
     respond_to do |format|
       if @anketum.update_attributes(params[:anketum])

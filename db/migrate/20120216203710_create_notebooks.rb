@@ -9,4 +9,8 @@ class CreateNotebooks < ActiveRecord::Migration
       t.timestamps
     end
   end
+  
+  def down
+	  drop_table :notebooks
+  end
 end

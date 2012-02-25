@@ -2,8 +2,14 @@ class NotebooksController < ApplicationController
   # GET /notebooks
   # GET /notebooks.json
   def index
-    @notebooks = Notebook.all
-
+  
+	if params[:user_id]
+		@user = User.find(params[:user_id])
+		@notebooks = @user.notebooks
+	else
+		@notebooks = Notebook.all
+	end
+	
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @notebooks }

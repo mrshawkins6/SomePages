@@ -1,38 +1,27 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>First name:</b> <%= @user.first_name %>
-</p>
-
-<p>
-  <b>Last name:</b> <%= @user.last_name %>
-</p>
-
-<p>
-  <b>Provider:</b> <%= @user.provider %>
-</p>
-
-<p>
-  <b>Provider:</b> <%= @user.provider_id %>
-</p>
-
-<p>
-  <b>Birthdate:</b> <%= @user.birthdate %>
-</p>
-
-<p>
-  <b>Email:</b> <%= @user.email %>
-</p>
-
-<%= link_to 'Стартовая', '/app' %>
-
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
-
-	С возвращением, <b><%= current_user.first_name %> <%= current_user.last_name %></b>!<br />
-	<div class="span2"><img src="<%= current_user.photo %>" />        <%= debug(signed_in?) %></div>
-	<div class="span6">
-	<%= current_user.notebooks.count %>
-	<%= link_to current_user.notebooks.first.title, notebook_path(current_user.notebooks.first) %> (<%= current_user.notebooks.first.anketum.count %>) <%= link_to "Создать анкету", new_anketum_path(:notebook => current_user.notebooks.first) %>
+<div id="user_profile">
+	<div class="span2">
+		<b><%= @user.first_name %> <%= @user.last_name %></b>
+		<img src="<%= @user.photo %>" />
+		<div class="user_rate_container">
+			<div class="user_rate">рейтинг</div>
+		</div>
+		<div class=""> наград</div>
 	</div>
+	<div class="span8">
+		<p id="notice"><%= notice %></p>
+		<p>С возвращением!</p>
+		<p>У вас 
+		<%= link_to current_user.notebooks.count.to_s + Russian::pluralize(current_user.notebooks.count.to_i, " тетрадь", " тетради", " тетрадей"), notebooks_path(:user_id => current_user.id) %>, в 
+		<%= Russian::pluralize(current_user.notebooks.count.to_i, " которой", " которых", " которых") %>
+		<%= current_user.anketum.count.to_s + Russian::pluralize(current_user.anketum.count.to_i, " анкета", " анкеты", " анкет") %> и 
+		<%= current_user.questions.count.to_s + Russian::pluralize(current_user.questions.count.to_i, " вопрос", " вопроса", " вопросов") %>
+		</p>
+		
+		<p>Вы ответили на вопросов и заполнили  анкет</p>
+		
+		<p><%= link_to "Создать тетрадь", new_notebook_path(:user_id => current_user.id) %></p>
+
+		<p><b>Новые запросы</b> (0) | <b>Новые ответы</b> (0)</p>
+
+		</div>
+</div>

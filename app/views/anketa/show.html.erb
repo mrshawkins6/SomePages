@@ -1,15 +1,35 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>Notebook:</b>
-  <%= @anketum.notebook_id %>
+  <b>Тетрадь:</b>
+  <%= @anketum.notebook.title %>
 </p>
 
 <p>
-  <b>Title:</b>
-  <%= @anketum.title %>
+  <b><%= @anketum.title %></b> <%= link_to 'Редактировать', edit_anketum_path(@anketum) %>
 </p>
+<%= debug(@anketum.questions) %>
+	<% if @anketum.questions.nil? %>
+		
+		<p>
+		
+			<b>Вопросы не заполнены</b>
+		
+		</p>
+	
+	<% else %>
 
+		<% @anketum.questions.each do |q| %>
+		
+			<div>
+				
+				<%= q.title %>, <%= q.variant %>
+			
+			</div>
+		
+		<% end %>
+	
+	<% end %>
 
-<%= link_to 'Edit', edit_anketum_path(@anketum) %> |
+<%= link_to 'Попросить ответить', edit_anketum_path(@anketum) %> |
 <%= link_to 'Back', anketa_path %>

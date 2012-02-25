@@ -4,9 +4,11 @@ class User < ActiveRecord::Base
 		
 	# Атрибуты
 	attr_accessor :status
-	attr_accessible :first_name, :last_name, :email, :password, :provider, :provider_id, :photo
 	
-	before_save :make_salt
+	# attr_accessible, атрибуты для массового присвоения!
+	attr_accessible :first_name, :last_name, :email, :password, :provider, :provider_id, :photo, :birthdate
+	
+	before_save :make_salt, :check_date
 
 	# Константы провайдеров
 	VKONTAKTE = 1
@@ -22,6 +24,8 @@ class User < ActiveRecord::Base
 
 	# Связи
 	has_many :notebooks, :dependent => :destroy
+	has_many :anketum, :through => :notebooks
+	has_many :questions, :through => :anketum
 	
 	validates :provider,  :presence => true
 	validates :provider_id, :presence => true
@@ -37,17 +41,19 @@ class User < ActiveRecord::Base
 	
 	def self.authByKontakt(params, vkSession)
 	
-		provider_info = vkSession.getProfiles :uids => params[:viewer_id], :fields => "uid, first_name, last_name, sex, bdate, photo_medium, contacts, education, online, counters"
+		provider_info = vkSession.getProfiles :uids => params[:viewer_id], :fields => "uid, first_name, last_name, photo_medium"
 		
 		provider_info = provider_info.first
+		
+		vkUser = provider_info["user"]
 
-		user = User.where(:provider_id => provider_info["user"]["uid"].to_i, :provider => VKONTAKTE).first
+		user = User.where(:provider_id => vkUser["uid"].to_i, :provider => VKONTAKTE).first
 		
 		if user == nil
 		
 			# если пользователь впервые зашёл в приложение
 		
-			user = User.new({:provider => VKONTAKTE.to_i, :provider_id => provider_info["user"]["uid"].to_i, :first_name => provider_info["user"]["first_name"].to_s, :last_name => provider_info["user"]["last_name"].to_s, :photo => provider_info["user"]["photo_medium"].to_s})
+			user = User.new({:provider => VKONTAKTE.to_i, :provider_id => vkUser["uid"].to_i, :first_name => vkUser["first_name"].to_s, :last_name => vkUser["last_name"].to_s, :photo => vkUser["photo_medium"].to_s})
 			
 			user.save
 			
@@ -61,9 +67,9 @@ class User < ActiveRecord::Base
 			
 		else
 		
-			if user.first_name != provider_info["user"]["first_name"].to_s || user.last_name != provider_info["user"]["last_name"].to_s || user.photo != provider_info["user"]["photo_medium"].to_s
+			if user.first_name != vkUser["first_name"].to_s || user.last_name != vkUser["last_name"].to_s || user.photo != vkUser["photo_medium"].to_s
 			
-				user.update_attributes(:first_name => provider_info["user"]["first_name"].to_s, :last_name => provider_info["user"]["last_name"].to_s, :photo => provider_info["user"]["photo_medium"].to_s)
+				user.update_attributes(:first_name => vkUser["first_name"].to_s, :last_name => vkUser["last_name"].to_s, :photo => vkUser["photo_medium"].to_s)
 			
 			end
 		
@@ -78,14 +84,21 @@ class User < ActiveRecord::Base
 			user.status = true
 		
 		end
-		
+
 		user
 		
 	end
 	
+	def fullname
+	
+		fullname = self.first_name + " " + self.last_name
+	
+		return fullname
+	
+	end
+	
 	def self.create_with_omniauth(auth)
 	  create! do |user|
-		#user.provider = auth["provider"]
 		user.provider = VKONTAKTE.to_i
 		user.provider_id = auth["uid"].to_i
 		user.first_name = auth["first_name"].to_s
@@ -112,6 +125,5 @@ class User < ActiveRecord::Base
 			self.salt = Digest::SHA2.hexdigest("#{Time.now.utc}--#{provider_id}")
 		
 		end
-	
 	
 end

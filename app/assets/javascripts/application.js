@@ -13,3 +13,11 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+$().ready(function(){
+	
+	$('#profile_link').tooltip({placement: 'bottom', title: 'Профиль'})
+	$('#edit_profile_link').tooltip({placement: 'bottom', title: 'Настройки'})
+	$('#rate_system_link').tooltip({placement: 'bottom', title: 'Рейтинг'})
+	$('#sign_out_link').tooltip({placement: 'bottom', title: 'Выйти'})
+	
+});
