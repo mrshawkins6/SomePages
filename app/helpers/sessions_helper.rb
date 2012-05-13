@@ -1,6 +1,8 @@
 module SessionsHelper
+  # из-за проблем с запоминанием куки на первом входе в приложение через iframe временно используется массив сессии
+
   def sign_in(user)
-	cookies.permanent.signed[:remember_token] = [user.id, user.salt]
+	#cookies.permanent.signed[:remember_token] = [user.id, user.salt]
 	session[:user_id] = user.id
 	current_user = user
   end
@@ -10,7 +12,7 @@ module SessionsHelper
   end
 
   def sign_out
-    cookies.delete(:remember_token)
+    #cookies.delete(:remember_token)
 	session[:user_id] = nil
     self.current_user = nil
   end

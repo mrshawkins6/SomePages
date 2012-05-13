@@ -6,9 +6,9 @@ class User < ActiveRecord::Base
 	attr_accessor :status
 	
 	# attr_accessible, атрибуты для массового присвоения!
-	attr_accessible :first_name, :last_name, :email, :password, :provider, :provider_id, :photo, :birthdate
+	attr_accessible :first_name, :last_name, :email, :password, :provider, :provider_id, :photo
 	
-	before_save :make_salt, :check_date
+	before_save :make_salt
 
 	# Константы провайдеров
 	VKONTAKTE = 1
@@ -23,8 +23,7 @@ class User < ActiveRecord::Base
 	email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
 	# Связи
-	has_many :notebooks, :dependent => :destroy
-	has_many :anketum, :through => :notebooks
+	has_many :anketum, :dependent => :destroy
 	has_many :questions, :through => :anketum
 	
 	validates :provider,  :presence => true
@@ -56,14 +55,6 @@ class User < ActiveRecord::Base
 			user = User.new({:provider => VKONTAKTE.to_i, :provider_id => vkUser["uid"].to_i, :first_name => vkUser["first_name"].to_s, :last_name => vkUser["last_name"].to_s, :photo => vkUser["photo_medium"].to_s})
 			
 			user.save
-			
-			first_title = "It's your first notebook"
-
-			first_descr = "Keep it real!!!"
-			
-			first_notebook = Notebook.new({:user_id => user.id.to_i, :title => first_title.to_s, :description => first_descr.to_s})
-			
-			first_notebook.save
 			
 		else
 		

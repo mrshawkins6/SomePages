@@ -1,5 +1,7 @@
 Anketki::Application.routes.draw do
 
+  resources :answers
+
   resources :users
   resources :anketa
   resources :notebooks

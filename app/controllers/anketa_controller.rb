@@ -28,8 +28,7 @@ class AnketaController < ApplicationController
   # GET /anketa/new
   # GET /anketa/new.json
   def new
-    @notebook = current_user.notebook
-	@anketum = Anketum.new(:notebook_id => !@notebook != nil ? @notebook.id : nil )
+	@anketum = Anketum.new(:user_id => current_user.id )
 	5.times{ @anketum.questions.build }
 	
 	  respond_to do |format|
@@ -42,13 +41,7 @@ class AnketaController < ApplicationController
   def edit
     @anketum = Anketum.find(params[:id])
 	
-	querstions_size = @anketum.questions.count
-
-	if querstions_size < 5 
-	
-		(5 - querstions_size).times{ @anketum.questions.build } 
-	
-	end
+	(5 - @anketum.questions.count).times{ @anketum.questions.build } if @anketum.questions.count < 5
 	
   end
 
@@ -72,14 +65,6 @@ class AnketaController < ApplicationController
   # PUT /anketa/1.json
   def update
     @anketum = Anketum.find(params[:id])
-	
-	querstions_size = @anketum.questions.count
-
-	if querstions_size < 5 
-	
-		(5 - querstions_size).times{ @anketum.questions.build } 
-	
-	end
 
     respond_to do |format|
       if @anketum.update_attributes(params[:anketum])

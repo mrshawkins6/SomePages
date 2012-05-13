@@ -9,17 +9,23 @@
 	</div>
 	<div class="span8">
 		<p id="notice"><%= notice %></p>
-		<p>С возвращением!</p>
-		<p>У вас 
-		<%= link_to current_user.notebooks.count.to_s + Russian::pluralize(current_user.notebooks.count.to_i, " тетрадь", " тетради", " тетрадей"), notebooks_path(:user_id => current_user.id) %>, в 
-		<%= Russian::pluralize(current_user.notebooks.count.to_i, " которой", " которых", " которых") %>
-		<%= current_user.anketum.count.to_s + Russian::pluralize(current_user.anketum.count.to_i, " анкета", " анкеты", " анкет") %> и 
-		<%= current_user.questions.count.to_s + Russian::pluralize(current_user.questions.count.to_i, " вопрос", " вопроса", " вопросов") %>
-		</p>
+		<p><b>С возвращением!</b></p>
+		<div class="anketums">
+			<div class="anketum_head">
+				У <%= ( current_user && @user.id == current_user.id)? "вас" : "пользователя " + @user.fullname %> <%= link_to @user.anketum.count.to_s + Russian::pluralize(@user.anketum.count.to_i, " анкета", " анкеты", " анкет"), anketa_path( :user_id => @user.id ) %> и 
+				<%= @user.questions.count.to_s + Russian::pluralize(@user.questions.count.to_i, " вопрос", " вопроса", " вопросов") %>
+			</div>
+			<div class="anketum_head">
+				<% @user.anketum.each do |a| %>
+					<b><%= a.title %></b><br />
+				<% end %>
+			</div>
+			<% if (current_user) %>
+			<p><%=  link_to "Создать анкету", new_anketum_path(:user_id => current_user.id) %></p>
+			<% end %>
+		</div>
 		
-		<p>Вы ответили на вопросов и заполнили  анкет</p>
-		
-		<p><%= link_to "Создать тетрадь", new_notebook_path(:user_id => current_user.id) %></p>
+		<div class="answers">Вы ответили на 0 вопросов и заполнили 0 анкет</div>
 
 		<p><b>Новые запросы</b> (0) | <b>Новые ответы</b> (0)</p>
 
